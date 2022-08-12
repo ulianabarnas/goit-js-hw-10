@@ -16,33 +16,27 @@ input.addEventListener(
 
 function handleSearchCountries(e) {
   const inputValue = e.target.value.trim();
+  countryList.innerHTML = '';
+  countryInfo.innerHTML = '';
   if (inputValue === '') return;
 
   fetchCountries(inputValue)
     .then(data => {
-      console.log(data);
-
-      if (data.length === 1) {
-        countryList.innerHTML = '';
-        renderCountryInfo(data[0]);
-      }
-
       if (data.length > 10) {
-        countryList.innerHTML = '';
-        countryInfo.innerHTML = '';
         Notify.info(
           'Too many matches found. Please enter a more specific name.'
         );
       }
 
       if (data.length > 1 && data.length <= 10) {
-        countryInfo.innerHTML = '';
         renderContriesList(data);
+      }
+
+      if (data.length === 1) {
+        renderCountryInfo(data[0]);
       }
     })
     .catch(error => {
-      countryList.innerHTML = '';
-      countryInfo.innerHTML = '';
       console.log(error);
       Notify.failure('Oops, there is no country with that name');
     });
