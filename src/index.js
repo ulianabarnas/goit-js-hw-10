@@ -21,19 +21,21 @@ function handleSearchCountries(e) {
   fetchCountries(inputValue)
     .then(data => {
       console.log(data);
+
+      if (data.length === 1) {
+        countryList.innerHTML = '';
+        renderCountryInfo(data[0]);
+      }
+
       if (data.length > 10) {
         Notify.info(
           'Too many matches found. Please enter a more specific name.'
         );
       }
 
-      if (data.length <= 10) {
+      if (data.length > 1 && data.length <= 10) {
+        countryInfo.innerHTML = '';
         renderContriesList(data);
-      }
-
-      if (data.length === 1) {
-        countryList.innerHTML = '';
-        renderCountryInfo(data);
       }
     })
     .catch(error => {
@@ -55,12 +57,14 @@ function renderContriesList(countries) {
 }
 
 function renderCountryInfo(country) {
-  const language = country.languages;
-  const markup = `<img class="country-flag" src="${country.flags.svg}" alt="flag of ${country.name.common}" width="60">
-  <h2>${country.name.common}</h2>
-    <p><b>Capital: </b>${country.capital}</p>
+  const lang = Object.values(country.languages).join(', ');
+  const markup = `<div class="wrapper">
+    <img class="country-flag" src="${country.flags.svg}" alt="flag of ${country.name.common}" width="60" >
+    <h2 class="country-title">${country.name.common}</h2>
+  </div>
+  <p><b>Capital: </b>${country.capital}</p>
   <p><b>Population: </b>${country.population}</p>
-  <p><b>Languages: </b>${country.capital}</p>`;
+  <p><b>Languages: </b>${lang}</p>`;
 
   countryInfo.innerHTML = markup;
 }
