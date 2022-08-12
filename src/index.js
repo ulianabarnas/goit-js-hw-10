@@ -28,6 +28,8 @@ function handleSearchCountries(e) {
       }
 
       if (data.length > 10) {
+        countryList.innerHTML = '';
+        countryInfo.innerHTML = '';
         Notify.info(
           'Too many matches found. Please enter a more specific name.'
         );
@@ -39,6 +41,8 @@ function handleSearchCountries(e) {
       }
     })
     .catch(error => {
+      countryList.innerHTML = '';
+      countryInfo.innerHTML = '';
       console.log(error);
       Notify.failure('Oops, there is no country with that name');
     });
